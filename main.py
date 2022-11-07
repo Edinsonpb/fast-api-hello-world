@@ -3,7 +3,7 @@ from typing import Optional
 from enum import Enum
 
 #Pydantic
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from pydantic import Field
 
 #FastAPI
@@ -22,9 +22,18 @@ class HairColor(Enum):
     red = "red"
 
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str
+    city: str = Field(
+        ...,
+        max_length=20
+    )
+    state: str = Field(
+        ...,
+        max_length=20
+    )
+    country: str = Field(
+        ...,
+        max_length=20
+    )
 
 
 class Person(BaseModel):
@@ -45,6 +54,14 @@ class Person(BaseModel):
     )
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[bool] = Field(default=None)
+
+class Contactinfo(BaseModel):
+    personalemail: EmailStr = Field(default=None)
+    cellphone: str = Field(
+        ...,
+        min_length=10
+    )
+
 
 @app.get("/")
 def home():
@@ -95,8 +112,10 @@ def update_person(
         gt=0
     ),
     person: Person = Body(...),
-    location: Location = Body(...)
+    location: Location = Body(...),
+    personalcontact: Contactinfo = Body(...)
 ):
     results = person.dict()
     results.update(location.dict())
+    results.update(personalcontact.dict())
     return results
