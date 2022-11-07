@@ -35,6 +35,15 @@ class Location(BaseModel):
         max_length=20
     )
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "city": "Pereira",
+                "state": "Risaralda",
+                "country": "Colombia"
+            }
+        }
+
 
 class Person(BaseModel):
     first_name: str = Field(
@@ -55,12 +64,31 @@ class Person(BaseModel):
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[bool] = Field(default=None)
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "first_name": "Eva",
+                "last_name": "Parra Buitrago",
+                "age": 18,
+                "hair_color": "black",
+                "is_married": False
+            }
+        }
+
 class Contactinfo(BaseModel):
     personalemail: EmailStr = Field(default=None)
     cellphone: str = Field(
         ...,
         min_length=10
     )
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "personalemail": "evaparrabuitrago@gmail.com",
+                "cellphone": "3174341284"
+            }
+        }
 
 
 @app.get("/")
