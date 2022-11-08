@@ -8,8 +8,9 @@ from pydantic import Field
 
 #FastAPI
 from fastapi import FastAPI
-from fastapi import Body, Query, Path
+from fastapi import Body, Query, Path, Form
 from fastapi import status
+
 
 app = FastAPI()
 
@@ -102,6 +103,12 @@ class Contactinfo(BaseModel):
             }
         }
 
+class LoginOut(BaseModel):
+    username: str = Field(...,
+    max_length=20,
+    example="12345678"
+    )
+    message: str = Field(default="Login Succesfull")
 
 @app.get(
     path="/",
@@ -169,7 +176,7 @@ def update_person(
         description="This is the person ID",
         gt=0,
         example=1089603058
-    ),
+        ),
     person: Person = Body(...),
     location: Location = Body(...),
     personalcontact: Contactinfo = Body(...)
@@ -178,3 +185,12 @@ def update_person(
     results.update(location.dict())
     results.update(personalcontact.dict())
     return results
+
+@app.post(
+    path="/login",
+    response_model=LoginOut,
+    status_code=status.HTTP_200_OK
+)
+def login(username: str = Form(...),
+    password: str = Form(...)):
+    return LoginOut(username=username)
