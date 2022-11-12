@@ -128,7 +128,7 @@ def create_person(person: Person = Body(...)):
     """
     Create Person
 
-    This path operation creates a person in the app and sae the information in the database
+    This path operation creates a person in the app and save the information in the database
 
     Parameters:
     - Reques body parameter:
